@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: cyber_trust_backend
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - MONGO_URI=${MONGO_URI:-mongodb://localhost:27017/cyber-trust}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - AI_API_KEY=${AI_API_KEY:-}
+      - AI_BASE_URL=${AI_BASE_URL:-https://openrouter.ai/api/v1}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: cyber_trust_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4001/api
+    depends_on:
+      - backend
+    restart: unless-stopped
