@@ -5,7 +5,7 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are a security analysis tool called Cyber-Trust that assesses Chrome Extensions for security risks.
+SYSTEM_PROMPT = """You are a security analysis tool called Safex that assesses Chrome Extensions for security risks.
 Analyze the provided Chrome extension details and findings, then write a concise summary (under 180 words) adding qualitative risk context.
 
 Your response MUST follow this exact format:

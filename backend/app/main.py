@@ -21,10 +21,10 @@ limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 Starting Cyber-Trust Python FastAPI Service...")
+    logger.info("🚀 Starting Safex Python FastAPI Service...")
     await connect_to_mongo()
     yield
-    logger.info("🛑 Shutting down Cyber-Trust Backend...")
+    logger.info("🛑 Shutting down Safex Backend...")
     await close_mongo_connection()
 
 app = FastAPI(
@@ -57,7 +57,7 @@ app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"]
 async def health_check():
     return {
         "status": "ok",
-        "service": "Cyber-Trust Python FastAPI",
+        "service": "Safex Python FastAPI",
         "dbConnected": db_manager.connected,
         "port": settings.PORT
     }

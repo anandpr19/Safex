@@ -28,7 +28,7 @@ export default function Navbar() {
             </ClientOnly>
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-mono">
-            Cyber-Trust
+            Safex
           </span>
         </Link>
 

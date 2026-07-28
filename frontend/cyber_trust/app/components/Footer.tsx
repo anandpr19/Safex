@@ -14,7 +14,7 @@ export default function Footer() {
                   <ShieldCheck className="h-4 w-4" />
                 </ClientOnly>
               </div>
-              <span className="text-lg font-bold text-slate-900 dark:text-white font-mono">Cyber-Trust</span>
+              <span className="text-lg font-bold text-slate-900 dark:text-white font-mono">Safex</span>
             </div>
             <p className="mt-4 max-w-sm text-xs font-mono text-slate-600 dark:text-slate-400 leading-relaxed uppercase">
               AUTOMATED CHROME EXTENSION SECURITY ANALYZER POWERED BY STATIC CODE POLICY ENGINES AND AI THREAT CONTEXT EVALUATION.
@@ -57,7 +57,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-slate-200 dark:border-slate-800/80 pt-6 text-center text-xs font-mono text-slate-500">
-          © {new Date().getFullYear()} Cyber-Trust Security Engine. Built for browser safety and transparency.
+          © {new Date().getFullYear()} Safex Security Engine. Built for browser safety and transparency.
         </div>
       </div>
     </footer>

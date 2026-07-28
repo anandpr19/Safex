@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import { ThemeProvider } from "./context/ThemeContext";
 
 export const metadata = {
-  title: "Cyber-Trust | Chrome Extension Security Analyzer",
+  title: "Safex | Chrome Extension Security Analyzer",
   description: "Static security analysis for Chrome extensions. Scan permissions, detect vulnerabilities, and retrieve trust scores.",
 };
 

@@ -2,10 +2,10 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Cyber-Trust Security Analyzer"
+    PROJECT_NAME: str = "Safex Security Analyzer"
     API_V1_STR: str = "/api"
     PORT: int = 4001
-    MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017/cyber-trust")
+    MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017/safex")
     CORS_ORIGIN: str = os.getenv("CORS_ORIGIN", "http://localhost:3000,http://localhost:5173")
     
     # AI Settings

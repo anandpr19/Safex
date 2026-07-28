@@ -18,8 +18,8 @@ async def connect_to_mongo():
         # Verify connection
         await db_manager.client.admin.command('ping')
         
-        # Get database name from URI or fallback to cyber-trust
-        db_name = "cyber-trust"
+        # Get database name from URI or fallback to safex
+        db_name = "safex"
         if "/" in settings.MONGO_URI.split("://")[-1]:
             uri_parts = settings.MONGO_URI.split("?")[0].split("/")
             if uri_parts[-1]:

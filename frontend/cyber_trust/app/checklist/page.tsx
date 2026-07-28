@@ -70,7 +70,7 @@ export default function ChecklistPage() {
           23-Point Security Audit Criteria
         </h1>
         <p className="mt-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
-          COMPLETE SPECIFICATION OF PERMISSION RISKS AND PENALTY CALCULATIONS EVALUATED BY CYBER-TRUST
+          COMPLETE SPECIFICATION OF PERMISSION RISKS AND PENALTY CALCULATIONS EVALUATED BY SAFEX
         </p>
       </div>
 

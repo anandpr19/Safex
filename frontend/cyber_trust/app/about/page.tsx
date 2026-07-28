@@ -10,21 +10,21 @@ export default function AboutPage() {
           <span>Security Architecture & Methodology</span>
         </div>
         <h1 className="mt-6 text-4xl font-extrabold text-white sm:text-5xl">
-          About <span className="gradient-text">Cyber-Trust</span>
+          About <span className="gradient-text">Safex</span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300 leading-relaxed">
-          Cyber-Trust is an enterprise-grade automated security analyzer built to demystify Chrome extension risks and protect users from data exfiltration, malicious permissions, and vulnerable code patterns.
+          Safex is an enterprise-grade automated security analyzer built to demystify Chrome extension risks and protect users from data exfiltration, malicious permissions, and vulnerable code patterns.
         </p>
       </div>
 
       {/* Brand Mission Section */}
       <div className="mt-16 glass-panel rounded-3xl p-8 sm:p-10 border border-slate-800">
-        <h2 className="text-2xl font-bold text-white">Why We Built Cyber-Trust</h2>
+        <h2 className="text-2xl font-bold text-white">Why We Built Safex</h2>
         <p className="mt-4 text-slate-300 leading-relaxed">
           Chrome extensions execute with privileged access inside user browsers—reading sensitive browsing data, interacting with web pages, and storing local auth credentials. Yet users are expected to accept cryptic permission prompts like <code className="rounded bg-slate-900 px-2 py-0.5 text-xs text-blue-400 font-mono">"Read and change all your data on all websites"</code> without understanding the true security context.
         </p>
         <p className="mt-3 text-slate-300 leading-relaxed">
-          Cyber-Trust bridges this gap by statically auditing extension binaries, parsing Content Security Policies, extracting hidden external domain URLs, and translating technical risk vectors into plain-English summaries.
+          Safex bridges this gap by statically auditing extension binaries, parsing Content Security Policies, extracting hidden external domain URLs, and translating technical risk vectors into plain-English summaries.
         </p>
       </div>
 

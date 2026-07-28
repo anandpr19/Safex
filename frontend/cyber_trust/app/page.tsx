@@ -55,7 +55,7 @@ export default function HomePage() {
                 <span className="h-3 w-3 rounded-full bg-yellow-500/80 inline-block" />
                 <span className="h-3 w-3 rounded-full bg-green-500/80 inline-block" />
               </div>
-              <span className="text-slate-500 text-[11px]">cyber-trust scan</span>
+              <span className="text-slate-500 text-[11px]">safex scan</span>
             </div>
 
             {/* Simulated Scan Tree Output */}
