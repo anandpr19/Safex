@@ -1,10 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Zap, Lock, Code2, BarChart3, Check, AlertTriangle, XCircle } from "lucide-react";
+import axios from "axios";
 import ClientOnly from "./components/ClientOnly";
 
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001/api";
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, "");
+
 export default function HomePage() {
+  const [stats, setStats] = useState<{ totalScans: number; avgScore: number; categoriesCount: number } | null>(null);
+
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/dashboard/stats`)
+      .then((res) => {
+        if (res.data && res.data.stats) {
+          setStats({
+            totalScans: res.data.stats.totalScans || 0,
+            avgScore: res.data.stats.avgScore || 100,
+            categoriesCount: (res.data.stats.categoryBreakdown || []).length || 0,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load homepage stats:", err);
+      });
+  }, []);
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-12 bg-white dark:bg-transparent" suppressHydrationWarning>
       {/* HERO SECTION - MATCHING SCREENSHOT #1 */}
@@ -111,19 +134,25 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* STAT COUNTERS BAR (MATCHING SCREENSHOT #1) */}
+      {/* STAT COUNTERS BAR (DYNAMIC LIVE METRICS) */}
       <div className="mt-20 border-y border-slate-200 dark:border-slate-800 py-10 bg-white dark:bg-transparent">
         <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4 font-mono">
           <div>
-            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">54+</div>
+            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+              {stats ? `${stats.totalScans}` : "6+"}
+            </div>
             <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">EXTENSIONS SCANNED</div>
           </div>
           <div>
-            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">28</div>
-            <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">UNIQUE EXTENSIONS</div>
+            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+              {stats ? `${stats.categoriesCount}` : "4"}
+            </div>
+            <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">CATEGORIES AUDITED</div>
           </div>
           <div>
-            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">22</div>
+            <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
+              {stats ? `${stats.avgScore}/100` : "84/100"}
+            </div>
             <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">AVG TRUST SCORE</div>
           </div>
           <div>
@@ -133,7 +162,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* CAPABILITIES SECTION (MATCHING SCREENSHOT #1) */}
+      {/* CAPABILITIES SECTION */}
       <div className="mt-20">
         <h2 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">CAPABILITIES</h2>
 

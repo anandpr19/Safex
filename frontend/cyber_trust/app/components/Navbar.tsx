@@ -15,6 +15,7 @@ export default function Navbar() {
     { name: "ANALYZE", href: "/analyze" },
     { name: "DASHBOARD", href: "/dashboard" },
     { name: "CHECKLIST", href: "/checklist" },
+    { name: "ABOUT", href: "/about" },
   ];
 
   return (
@@ -40,11 +41,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors py-1 ${
-                  isActive
+                className={`transition-colors py-1 ${isActive
                     ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 font-bold"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>

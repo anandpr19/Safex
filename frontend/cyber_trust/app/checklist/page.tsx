@@ -67,10 +67,10 @@ export default function ChecklistPage() {
           <span># SECURITY CHECKLIST V1.0</span>
         </div>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white font-mono">
-          23-Point Security Audit Criteria
+          HOW DO WE PROVIDE A SCORE FOR THE EXTENSIONS ?
         </h1>
         <p className="mt-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
-          COMPLETE SPECIFICATION OF PERMISSION RISKS AND PENALTY CALCULATIONS EVALUATED BY SAFEX
+          DOWN BELOW ARE THE COMPLETE SPECIFICATION OF PERMISSION RISKS AND PENALTY CALCULATIONS EVALUATED BY SAFEX
         </p>
       </div>
 
@@ -94,11 +94,10 @@ export default function ChecklistPage() {
             <button
               key={sev}
               onClick={() => setFilter(sev)}
-              className={`rounded-lg px-3 py-1.5 uppercase transition-colors ${
-                filter === sev
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
-              }`}
+              className={`rounded-lg px-3 py-1.5 uppercase transition-colors ${filter === sev
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
+                }`}
             >
               {sev}
             </button>
@@ -113,15 +112,14 @@ export default function ChecklistPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-3">
                 <span
-                  className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase ${
-                    item.severity === "critical"
-                      ? "bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-800/60"
-                      : item.severity === "high"
+                  className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase ${item.severity === "critical"
+                    ? "bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-800/60"
+                    : item.severity === "high"
                       ? "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800/60"
                       : item.severity === "medium"
-                      ? "bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 border border-yellow-300 dark:border-yellow-800/60"
-                      : "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800/60"
-                  }`}
+                        ? "bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 border border-yellow-300 dark:border-yellow-800/60"
+                        : "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800/60"
+                    }`}
                 >
                   {item.severity}
                 </span>

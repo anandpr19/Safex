@@ -92,7 +92,15 @@ export default function ResultsPage({ params }: ResultsProps) {
       <div className="mt-6 tech-card rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           {storeMetadata?.icon ? (
-            <img src={storeMetadata.icon} alt="" className="h-16 w-16 rounded-xl object-contain bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800" />
+            <img
+              src={storeMetadata.icon}
+              alt=""
+              referrerPolicy="no-referrer"
+              onError={(e) => {
+                (e.target as HTMLElement).style.display = "none";
+              }}
+              className="h-16 w-16 rounded-xl object-contain bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200 dark:border-slate-800"
+            />
           ) : (
             <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-blue-600 font-mono text-2xl font-extrabold text-white">
               {name?.charAt(0) || "E"}
