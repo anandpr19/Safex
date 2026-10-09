@@ -224,19 +224,54 @@ export default function ResultsPage({ params }: ResultsProps) {
       {/* TAB CONTENT 2: STATS FOR NERDS */}
       {activeTab === "detailed" && (
         <div className="mt-6 space-y-6">
-          {/* Extracted Embedded URLs */}
-          <div className="tech-card rounded-xl p-6">
-            <h3 className="text-xs font-mono font-bold uppercase text-slate-900 dark:text-white flex items-center gap-2">
-              <ExternalLink className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
-              Extracted Embedded External URLs ({(rawData?.embeddedUrls || []).length})
-            </h3>
-            <div className="mt-4 max-h-48 overflow-y-auto space-y-1 rounded-lg bg-[#0d1117] p-4 text-xs font-mono text-cyan-400 border border-slate-800">
-              {(rawData?.embeddedUrls || []).length === 0 ? (
-                <div className="text-slate-500">No external URLs extracted.</div>
-              ) : (
-                rawData.embeddedUrls.map((url: string, idx: number) => (
-                  <div key={idx} className="truncate hover:text-cyan-200">{url}</div>
+          {/* Extracted Embedded URLs Intelligence */}
+          <div className="tech-card rounded-xl p-6 border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-mono font-bold uppercase text-slate-900 dark:text-white flex items-center gap-2">
+                <ExternalLink className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                Extracted Embedded External URLs ({(rawData?.embeddedUrls || []).length})
+              </h3>
+              <span className="text-[10px] font-mono font-bold uppercase text-slate-500 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">
+                Domain Correlation Active
+              </span>
+            </div>
+
+            <p className="mt-2 text-xs font-mono text-slate-600 dark:text-slate-400">
+              Static domain inspection correlating hardcoded URLs in background workers, scripts, and HTML pages with declared extension host permissions.
+            </p>
+
+            <div className="mt-4 space-y-2.5 max-h-80 overflow-y-auto font-mono text-xs">
+              {(rawData?.categorizedUrls && rawData.categorizedUrls.length > 0) ? (
+                rawData.categorizedUrls.map((item: any, idx: number) => (
+                  <div key={idx} className="flex flex-col gap-1.5 p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <span className="truncate font-mono text-cyan-700 dark:text-cyan-400 font-bold select-all">{item.url}</span>
+                      <span className={`shrink-0 rounded px-2 py-0.5 text-[10px] font-bold uppercase ${
+                        item.relevance === "directly_relevant" ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/60" :
+                        item.relevance === "platform_standard" ? "bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-400 border border-teal-300 dark:border-teal-800/60" :
+                        item.relevance === "infrastructure" ? "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800/60" :
+                        "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-800/60"
+                      }`}>
+                        {item.type}
+                      </span>
+                    </div>
+                    {item.explanation && (
+                      <p className="text-[11px] text-slate-500 font-medium">
+                        💡 {item.explanation}
+                      </p>
+                    )}
+                  </div>
                 ))
+              ) : (rawData?.embeddedUrls && rawData.embeddedUrls.length > 0) ? (
+                rawData.embeddedUrls.map((url: string, idx: number) => (
+                  <div key={idx} className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-cyan-700 dark:text-cyan-400 font-bold truncate">
+                    {url}
+                  </div>
+                ))
+              ) : (
+                <div className="p-4 text-center text-slate-500 font-mono text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                  No external hardcoded URLs detected in extension codebase.
+                </div>
               )}
             </div>
           </div>

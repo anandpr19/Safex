@@ -72,11 +72,17 @@ async def scrape_store_metadata(extension_id: str) -> dict | None:
             if meta_desc and meta_desc.get("content"):
                 description = meta_desc["content"].strip()
                 
-            # Extract Rating & User Count
+            # Extract Rating & User Count (checking HTML text & embedded JSON)
             users = None
-            users_match = re.search(r"([\d,.]+\+?)\s*(?:users|weekly active users)", resp.text, re.IGNORECASE)
+            users_match = (
+                re.search(r'"userCount"\s*:\s*"??([\d,.]+\+?)"??', resp.text, re.IGNORECASE) or
+                re.search(r'"interactionCount"\s*:\s*"??([\d,.]+\+?)"??', resp.text, re.IGNORECASE) or
+                re.search(r"([\d,.]+\+?)\s*(?:users|weekly active users|active users)", resp.text, re.IGNORECASE) or
+                re.search(r"([\d,.]+\+?)\s*users", resp.text, re.IGNORECASE)
+            )
             if users_match:
-                users = users_match.group(1)
+                raw_u = users_match.group(1)
+                users = raw_u if "user" in raw_u.lower() else f"{raw_u} users"
                 
             rating = None
             rating_match = re.search(r"(\d(?:\.\d)?)\s*★|\b(\d\.\d)\s*out of 5", resp.text)
@@ -108,13 +114,13 @@ async def scrape_store_metadata(extension_id: str) -> dict | None:
                 "name": name or f"Extension ({extension_id[:8]})",
                 "icon": icon,
                 "description": description,
-                "users": users or "10,000+ users",
-                "rating": rating or "4.5",
+                "users": users or "User count unavailable",
+                "rating": rating or "N/A",
                 "category": category,
                 "author": author or "Verified Developer",
                 "url": url
             }
-            logger.info(f"✅ Metadata scraped successfully: name='{name}', icon='{icon[:40]}...'")
+            logger.info(f"✅ Metadata scraped successfully: name='{name}', users='{users}'")
             return result
     except Exception as e:
         logger.warning(f"⚠️ Web Store scraping exception: {e}")
@@ -122,8 +128,8 @@ async def scrape_store_metadata(extension_id: str) -> dict | None:
             "name": f"Extension ({extension_id[:8]})",
             "icon": f"https://www.google.com/s2/favicons?domain=chromewebstore.google.com&sz=128",
             "description": "Chrome Extension",
-            "users": "10,000+ users",
-            "rating": "4.5",
+            "users": "User count unavailable",
+            "rating": "N/A",
             "category": "General & Tools",
             "author": "Verified Developer",
             "url": url

@@ -5,15 +5,19 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are a security analysis tool called Safex that assesses Chrome Extensions for security risks.
-Analyze the provided Chrome extension details and findings, then write a concise summary (under 180 words) adding qualitative risk context.
+SYSTEM_PROMPT = """You are a Senior Extension Security Specialist for Safex, an automated security analyzer for Chrome Extensions.
+Analyze the provided Chrome extension details, permissions, security findings, embedded URLs, and declared Web Store category.
 
-Your response MUST follow this exact format:
+Evaluate whether the requested permissions and host access align with the extension's stated category and functionality (Permission-to-Category Correlation).
+
+Your response MUST be concise (under 180 words) and strictly follow this 3-part layout:
+
 Risk Level: <Critical|High|Medium|Low|Minimal>
-<Paragraph explaining key security aspects, trust factors, unnecessary permissions, and user recommendation.>
+[CONTEXT & JUSTIFICATION]: <1-2 sentences explaining if requested permissions (e.g. cookies, webRequest, <all_urls>) are typical and justified for this extension's category (e.g., Productivity, Developer Tools, Security) or if they present unnecessary exposure.>
+[ACTIONABLE RECOMMENDATION]: <Direct recommendation for users/admins (e.g., "Safe to install for personal use", "Audit host permissions before deploying in enterprise environments", or "Avoid installing due to excessive unneeded privileges").>
 """
 
-async def analyze_with_ai(manifest: dict, findings: list[dict], store_metadata: dict | None, extension_name: str) -> dict | None:
+async def analyze_with_ai(manifest: dict, findings: list[dict], store_metadata: dict | None, extension_name: str, categorized_urls: list[dict] | None = None) -> dict | None:
     api_key = settings.AI_API_KEY
     if not api_key:
         logger.info("ℹ️ AI_API_KEY is not set - skipping AI contextual analysis")
@@ -36,6 +40,12 @@ async def analyze_with_ai(manifest: dict, findings: list[dict], store_metadata: 
     prompt += f"Permissions: {', '.join(manifest.get('permissions', [])) or 'None'}\n"
     if store_metadata:
         prompt += f"Category: {store_metadata.get('category', 'Unknown')}, Users: {store_metadata.get('users', 'Unknown')}\n"
+    
+    if categorized_urls:
+        prompt += f"Embedded Hardcoded URLs ({len(categorized_urls)} total sample):\n"
+        for item in categorized_urls[:8]:
+            prompt += f"- [{item.get('type', 'External')}]: {item.get('url', '')} (Relevance: {item.get('relevance', 'unknown')})\n"
+
     prompt += f"Security Findings ({len(findings)} total):\n"
     for f in findings:
         prompt += f"- [{f.get('severity', 'info').upper()}]: {f.get('description', '')}\n"

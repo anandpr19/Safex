@@ -91,6 +91,7 @@ async def scan_extension(req: ScanRequest):
     # ── 2. Scrape Store Metadata ──
     store_meta = await scrape_store_metadata(parsed_id)
     extension_name = store_meta.get("name") if store_meta and store_meta.get("name") else f"Extension ({parsed_id[:8]})"
+    ext_category = store_meta.get("category") if store_meta else None
 
     # ── 3. Download CRX Package ──
     try:
@@ -103,7 +104,7 @@ async def scan_extension(req: ScanRequest):
 
     # ── 4. Unpack & Analyze ──
     try:
-        analysis = await analyze_buffer_zip(crx_bytes)
+        analysis = await analyze_buffer_zip(crx_bytes, category=ext_category)
     except Exception as e:
         raise HTTPException(
             status_code=400,
@@ -121,7 +122,8 @@ async def scan_extension(req: ScanRequest):
         analysis["manifest"],
         analysis["findings"],
         store_meta,
-        extension_name
+        extension_name,
+        categorized_urls=analysis.get("categorizedUrls")
     )
 
     report = format_findings_for_users(analysis["findings"], analysis["score"])
@@ -138,12 +140,17 @@ async def scan_extension(req: ScanRequest):
                 "score": analysis["score"],
                 "findings": analysis["findings"],
                 "embeddedUrls": analysis["embeddedUrls"],
+                "categorizedUrls": analysis.get("categorizedUrls", []),
                 "storeMetadata": store_meta,
                 "aiAnalysis": ai_analysis,
                 "scannedAt": now
             }
-            await db["extensions"].insert_one(doc)
-            logger.info("💾 Saved scan record to MongoDB")
+            await db["extensions"].update_one(
+                {"extensionId": parsed_id},
+                {"$set": doc},
+                upsert=True
+            )
+            logger.info(f"💾 Saved/Updated scan record for {parsed_id} in MongoDB")
             saved_to_db = True
         except Exception as db_err:
             logger.warning(f"⚠️ Database save failed: {db_err}")
@@ -159,7 +166,8 @@ async def scan_extension(req: ScanRequest):
             "manifest": analysis["manifest"],
             "score": analysis["score"],
             "findings": analysis["findings"],
-            "embeddedUrls": analysis["embeddedUrls"]
+            "embeddedUrls": analysis["embeddedUrls"],
+            "categorizedUrls": analysis.get("categorizedUrls", [])
         },
         storeMetadata=store_meta,
         aiAnalysis=ai_analysis,

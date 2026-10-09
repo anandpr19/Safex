@@ -65,9 +65,16 @@ async def get_scan_history(
         selected_cat = category.strip() if category and category.strip() else "All"
         search_q = search.strip().lower() if search and search.strip() else ""
 
-        # Fetch all matching candidate docs from MongoDB
+        # Build native MongoDB query filter for search
+        query = {}
+        if search_q:
+            query["$or"] = [
+                {"name": {"$regex": search_q, "$options": "i"}},
+                {"extensionId": {"$regex": search_q, "$options": "i"}}
+            ]
+
         cursor = collection.find(
-            {},
+            query,
             {
                 "extensionId": 1,
                 "name": 1,
@@ -83,16 +90,24 @@ async def get_scan_history(
         ).sort("scannedAt", -1)
 
         all_matching_items = []
+        seen_extension_ids = set()
+
         async for doc in cursor:
+            ext_id = doc.get("extensionId", "")
+            # Deduplicate multiple historical scans of the same extension ID
+            if ext_id and ext_id in seen_extension_ids:
+                continue
+            if ext_id:
+                seen_extension_ids.add(ext_id)
+
             doc_cat = resolve_category(doc)
             ext_name = doc.get("name", "Unknown Extension")
-            ext_id = doc.get("extensionId", "")
 
             # Apply category filter
             if selected_cat != "All" and doc_cat.lower() != selected_cat.lower():
                 continue
 
-            # Apply search filter
+            # Apply search filter fallback for category name
             if search_q and not (
                 search_q in ext_name.lower() or
                 search_q in ext_id.lower() or

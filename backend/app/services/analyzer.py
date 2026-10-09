@@ -3,7 +3,7 @@ import re
 import json
 import zipfile
 import logging
-from app.services.policy_engine import evaluate_policies
+from app.services.policy_engine import evaluate_policies, analyze_embedded_urls
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ def extract_urls(files: dict[str, str]) -> list[str]:
                 url_set.add(cleaned)
     return sorted(list(url_set))
 
-async def analyze_buffer_zip(raw_buf: bytes) -> dict:
+async def analyze_buffer_zip(raw_buf: bytes, category: str = None) -> dict:
     zip_bytes = strip_crx_header(raw_buf)
     
     files = {}
@@ -92,12 +92,14 @@ async def analyze_buffer_zip(raw_buf: bytes) -> dict:
         raise ValueError("manifest.json not found in Chrome Extension archive")
         
     embedded_urls = extract_urls(files)
-    score, findings = evaluate_policies(manifest, files)
+    categorized_urls = analyze_embedded_urls(embedded_urls, manifest=manifest, category=category)
+    score, findings = evaluate_policies(manifest, files, category=category)
     
     return {
         "manifest": manifest,
         "files": files,
         "score": score,
         "findings": findings,
-        "embeddedUrls": embedded_urls
+        "embeddedUrls": embedded_urls,
+        "categorizedUrls": categorized_urls
     }

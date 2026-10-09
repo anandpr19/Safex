@@ -64,14 +64,35 @@ export default function ChecklistPage() {
       {/* Page Header */}
       <div>
         <div className="inline-flex items-center gap-2 rounded border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-3 py-1 text-xs font-mono text-slate-800 dark:text-slate-300 font-bold">
-          <span># SECURITY CHECKLIST V1.0</span>
+          <span># SECURITY CHECKLIST & SCORING METHODOLOGY V2.0</span>
         </div>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white font-mono">
-          HOW DO WE PROVIDE A SCORE FOR THE EXTENSIONS ?
+          HOW SAFEX EVALUATES & SCORES EXTENSIONS
         </h1>
         <p className="mt-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
-          DOWN BELOW ARE THE COMPLETE SPECIFICATION OF PERMISSION RISKS AND PENALTY CALCULATIONS EVALUATED BY SAFEX
+          COMPLETE SPECIFICATION OF PERMISSION RISKS, CATEGORY JUSTIFICATIONS, AND PENALTY DISCOUNT RULES
         </p>
+      </div>
+
+      {/* Category-Aware Contextual Justification Notice */}
+      <div className="mt-8 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/80 dark:bg-blue-950/40 p-6 font-mono">
+        <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold text-xs uppercase">
+          <Info className="h-4 w-4 shrink-0" />
+          Category-Aware Contextual Scoring (V2.0 Engine)
+        </div>
+        <p className="mt-2 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+          Standard security scanners deduct rigid points for permissions regardless of purpose. Safex utilizes <strong>Permission-to-Category Correlation</strong>:
+        </p>
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-400">
+          <div className="rounded border border-emerald-300 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/30 p-3">
+            <span className="font-bold text-emerald-700 dark:text-emerald-400">✅ Expected / Justified Permissions</span>
+            <p className="mt-1">Permissions matching the extension category (e.g. <code>cookies</code> for Email tools or <code>webRequestBlocking</code> for Adblockers) receive a <strong>70% penalty waiver</strong>.</p>
+          </div>
+          <div className="rounded border border-amber-300 dark:border-amber-800/60 bg-amber-50/60 dark:bg-amber-950/30 p-3">
+            <span className="font-bold text-amber-700 dark:text-amber-400">⚠️ Unjustified / Excessive Permissions</span>
+            <p className="mt-1">Permissions outside the scope of declared utility (e.g. <code>debugger</code> or <code>camera</code> in a Calculator) trigger full severity penalties.</p>
+          </div>
+        </div>
       </div>
 
       {/* Filter & Search Bar */}
